@@ -4,7 +4,7 @@ Labs in this course are handed out through GitHub. Before you can pick one up,
 you need to be a member of the course organization. **This page is how you get
 in.** It takes about a minute, and you only do it once for the whole semester.
 
-You need two things: a GitHub account, and the **enrolment code** for your
+You need two things: a GitHub account, and the **enrollment code** for your
 section, which is in the Canvas announcement.
 
 ---
@@ -24,12 +24,12 @@ free.
   [GitHub Education](https://education.github.com/students), which is free and
   includes Copilot among other things. Optional, and any address works.
 
-## 2. Open an enrolment issue
+## 2. Open an enrollment issue
 
 Click **[New issue](../../issues/new/choose)** and choose
 **Join the course organization**.
 
-Paste the **enrolment code** for your section into the one field, and submit.
+Paste the **enrollment code** for your section into the one field, and submit.
 The code is in your section's Canvas announcement and looks like
 `CECS326-01-FA26-XXXX`.
 
@@ -75,7 +75,7 @@ You will not need to come back here.
 
 ## Troubleshooting
 
-**The bot said my code was not recognised.**
+**The bot said my code was not recognized.**
 Check you copied it from the announcement for *your* section, with no extra
 spaces before or after. Then open a new issue with the corrected code.
 
@@ -91,7 +91,7 @@ opening more issues.
 Give GitHub a minute to catch up, then try again. If it persists, message me.
 
 **I want to use a different GitHub account than the one I enrolled with.**
-Message me on Canvas. Do not enrol twice.
+Message me on Canvas. Do not enroll twice.
 
 ---
 

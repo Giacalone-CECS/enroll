@@ -66,7 +66,7 @@ def main() -> int:
     try:
         codes = json.loads(os.environ.get("ENROLL_CODES") or "{}")
     except json.JSONDecodeError:
-        comment(issue, "Enrolment is misconfigured on my side. I have been notified; "
+        comment(issue, "Enrollment is misconfigured on my side. I have been notified; "
                        "nothing you did caused this.")
         print("::error::ENROLL_CODES is not valid JSON", file=sys.stderr)
         return 0
@@ -78,13 +78,13 @@ def main() -> int:
             "Heads up: it looks like this issue contains a student ID or an email "
             "address. **This repository is public.** I do not need either one, so "
             "please edit the issue and take it out.\n\nCarrying on with your "
-            "enrolment regardless."
+            "enrollment regardless."
         )
 
     code = parse_code(body)
     if not code:
         comment(issue,
-                "I could not find an enrolment code in this issue.\n\nOpen a new one "
+                "I could not find an enrollment code in this issue.\n\nOpen a new one "
                 "using the form and paste the code from your section's Canvas "
                 "announcement. It looks like `CECS326-01-FA26-XXXX`.")
         gh("issue", "close", issue)
@@ -93,7 +93,7 @@ def main() -> int:
     classroom = codes.get(code) or codes.get(code.upper())
     if not classroom:
         comment(issue,
-                "That enrolment code was not recognised.\n\nCheck you copied it from "
+                "That enrollment code was not recognized.\n\nCheck you copied it from "
                 "the announcement for **your** section, exactly, with no extra "
                 "spaces. Then open a new issue with the corrected code.")
         gh("issue", "close", issue)

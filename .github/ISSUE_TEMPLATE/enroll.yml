@@ -1,7 +1,7 @@
 name: Join the course organization
 description: Get added to Giacalone-CECS so you can pick up labs.
-title: "Enrol me"
-labels: ["enrolment"]
+title: "Enroll me"
+labels: ["enrollment"]
 body:
   - type: markdown
     attributes:
@@ -16,7 +16,7 @@ body:
   - type: input
     id: code
     attributes:
-      label: Enrolment code
+      label: Enrollment code
       description: From the Canvas announcement for your section. Copy it exactly.
       placeholder: CECS326-01-FA26-XXXX
     validations:

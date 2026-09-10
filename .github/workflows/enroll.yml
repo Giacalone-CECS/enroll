@@ -4,7 +4,7 @@
 # `issues` events run in the base repository's context, so this workflow does
 # get repository secrets. That is what makes it possible at all; a
 # `pull_request` from a fork would not.
-name: Enrol
+name: Enroll
 
 on:
   issues:
@@ -16,19 +16,19 @@ permissions:
   issues: write
 
 concurrency:
-  group: enrol-${{ github.event.issue.number }}
+  group: enroll-${{ github.event.issue.number }}
   cancel-in-progress: false
 
 jobs:
-  enrol:
-    # Deliberately NOT gated on the 'enrolment' label. GitHub issue forms
+  enroll:
+    # Deliberately NOT gated on the 'enrollment' label. GitHub issue forms
     # silently drop a label that does not exist in the repository, so gating on
-    # one turns a missing label into "no student can ever enrol", with no error
+    # one turns a missing label into "no student can ever enroll", with no error
     # anywhere. Caught by the first live test, 2026-09-10.
     #
     # enroll.py is safe to run on any issue: an issue with no valid code gets a
     # comment explaining what to do and is closed. This repository exists only
-    # for enrolment, and blank issues are disabled.
+    # for enrollment, and blank issues are disabled.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -39,7 +39,7 @@ jobs:
           GH_TOKEN: ${{ secrets.ENROLL_TOKEN }}
         run: gh extension install foundation50/gh-teacher
 
-      - name: Enrol the issue author
+      - name: Enroll the issue author
         env:
           GH_TOKEN: ${{ secrets.ENROLL_TOKEN }}
           ENROLL_CODES: ${{ secrets.ENROLL_CODES }}

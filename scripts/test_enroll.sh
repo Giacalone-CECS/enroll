@@ -4,7 +4,7 @@
 #
 # Stubs `gh` on PATH and records every call, so each branch can be asserted
 # against what the script *would* have done. Run it before pushing a change to
-# the enrolment logic; the real thing is hard to test because failures land in
+# the enrollment logic; the real thing is hard to test because failures land in
 # a student's issue rather than in front of you.
 #
 #   ./scripts/test_enroll.sh
@@ -47,9 +47,9 @@ check() {  # check <description> <condition-cmd...>
 log_has()  { grep -q -- "$1" "$LOG"; }
 log_lacks(){ ! grep -q -- "$1" "$LOG"; }
 
-echo "enrol tests"
+echo "enroll tests"
 
-run "### Enrolment code
+run "### Enrollment code
 
 CECS326-01-FA26-8QK2"
 check "valid code adds to the roster"          log_has "teacher roster add Giacalone-CECS cecs-326-fa26-01 studentx"
@@ -59,12 +59,12 @@ check "exit status is 0"                       test "$RC" -eq 0
 
 run "CECS326-01-FA26-WRONG"
 check "unknown code does not add anyone"       log_lacks "roster add"
-check "unknown code explains itself"           log_has "was not recognised"
+check "unknown code explains itself"           log_has "was not recognized"
 check "unknown code still exits 0"             test "$RC" -eq 0
 
 run "hi please add me to the class"
 check "missing code does not add anyone"       log_lacks "roster add"
-check "missing code explains itself"           log_has "could not find an enrolment code"
+check "missing code explains itself"           log_has "could not find an enrollment code"
 
 run "CECS326-01-FA26-8QK2" "studentx"
 check "an existing member is not re-added"     log_lacks "roster add"
@@ -74,16 +74,16 @@ run "CECS326-01-FA26-8QK2" "" 1
 check "a failed add blames the instructor"     log_has "my problem rather than"
 check "a failed add still exits 0"             test "$RC" -eq 0
 
-run "### Enrolment code
+run "### Enrollment code
 
 CECS326-01-FA26-8QK2
 
 my id is 032571160"
 check "a posted student ID is flagged"         log_has "This repository is public"
 check "a posted student ID is not echoed"      log_lacks "032571160"
-check "but enrolment still proceeds"           log_has "roster add"
+check "but enrollment still proceeds"        log_has "roster add"
 
-run "### Enrolment code
+run "### Enrollment code
 
 CECS326-01-FA26-8QK2
 
