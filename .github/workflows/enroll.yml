@@ -1,0 +1,43 @@
+# Adds an issue's author to a Classroom 50 roster when they supply a valid
+# section code.
+#
+# `issues` events run in the base repository's context, so this workflow does
+# get repository secrets. That is what makes it possible at all; a
+# `pull_request` from a fork would not.
+name: Enrol
+
+on:
+  issues:
+    types: [opened]
+
+# Least privilege: comment on and close the issue, nothing else. Everything
+# that touches the organization goes through ENROLL_TOKEN instead.
+permissions:
+  issues: write
+
+concurrency:
+  group: enrol-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  enrol:
+    if: contains(github.event.issue.labels.*.name, 'enrolment')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gh-teacher
+        env:
+          GH_TOKEN: ${{ secrets.ENROLL_TOKEN }}
+        run: gh extension install foundation50/gh-teacher
+
+      - name: Enrol the issue author
+        env:
+          GH_TOKEN: ${{ secrets.ENROLL_TOKEN }}
+          ENROLL_CODES: ${{ secrets.ENROLL_CODES }}
+          ORG: ${{ github.repository_owner }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python3 scripts/enroll.py

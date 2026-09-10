@@ -1,0 +1,30 @@
+name: Join the course organization
+description: Get added to Giacalone-CECS so you can pick up labs.
+title: "Enrol me"
+labels: ["enrolment"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Opening this issue is how you join the course organization. Your GitHub
+        username is taken from your account automatically, so there is nothing
+        to type but the code.
+
+        > **Do not put your name, student ID, or email anywhere in this issue.**
+        > This repository is public. I do not need any of it, and posting it
+        > publicly is a bad habit to build. The form below is all I need.
+  - type: input
+    id: code
+    attributes:
+      label: Enrolment code
+      description: From the Canvas announcement for your section. Copy it exactly.
+      placeholder: CECS326-01-FA26-XXXX
+    validations:
+      required: true
+  - type: checkboxes
+    id: ack
+    attributes:
+      label: Before you submit
+      options:
+        - label: This issue contains no name, student ID, or email address.
+          required: true
