@@ -19,9 +19,11 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import re
 import subprocess
 import sys
+import time
 
 ORG = os.environ.get("ORG", "Giacalone-CECS")
 CODE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9-]{3,63}$")
@@ -34,6 +36,52 @@ def gh(*args: str, check: bool = False) -> tuple[int, str]:
     if check and p.returncode != 0:
         raise SystemExit(f"gh {' '.join(args)} failed: {p.stderr.strip()}")
     return p.returncode, (p.stdout + p.stderr).strip()
+
+
+# gh-teacher writes the roster by committing to the classroom repo's main
+# branch, so two students enrolling seconds apart race on the same git ref and
+# the loser gets HTTP 422 "Reference cannot be updated". It is transient and the
+# retry succeeds against the now-current ref.
+#
+# NOT solved with a workflow-level `concurrency` group: GitHub keeps only ONE
+# pending run per group and cancels any earlier pending one, so serializing a
+# burst of enrollments would silently drop students instead of queueing them.
+# That is strictly worse than the race. Retry here instead. (2026-09-10)
+REF_RACE = ("reference cannot be updated", "not a fast forward",
+            "http 409", "http 422", "is at", "cannot be fast-forwarded")
+
+ROSTER_ADD_ATTEMPTS = 5
+
+
+def on_roster(classroom: str, author: str) -> bool:
+    rc, out = gh("teacher", "roster", "list", ORG, classroom, "--quiet")
+    if rc != 0:
+        return False
+    return author.lower() in {ln.strip().lower() for ln in out.splitlines()}
+
+
+def roster_add(classroom: str, author: str) -> tuple[int, str]:
+    """Add to the roster, retrying past a lost ref race."""
+    section = classroom.rsplit("-", 1)[-1]
+    last = (1, "")
+    for attempt in range(1, ROSTER_ADD_ATTEMPTS + 1):
+        rc, out = gh("teacher", "roster", "add", ORG, classroom, author,
+                     "--section", section)
+        if rc == 0:
+            return 0, out
+        last = (rc, out)
+        if not any(sig in out.lower() for sig in REF_RACE):
+            return last          # a real failure; do not paper over it
+        # A competing run may have added them while we were losing the race.
+        if on_roster(classroom, author):
+            return 0, "added by a concurrent run"
+        if attempt < ROSTER_ADD_ATTEMPTS:
+            delay = min(2 ** attempt, 16) + random.uniform(0, 1.5)
+            print(f"::notice::roster add for {author} lost a ref race "
+                  f"(attempt {attempt}/{ROSTER_ADD_ATTEMPTS}); "
+                  f"retrying in {delay:.1f}s", file=sys.stderr)
+            time.sleep(delay)
+    return last
 
 
 def parse_code(body: str) -> str | None:
@@ -99,10 +147,7 @@ def main() -> int:
         gh("issue", "close", issue)
         return 0
 
-    rc, out = gh("teacher", "roster", "list", ORG, classroom, "--quiet")
-    already = author.lower() in {ln.strip().lower() for ln in out.splitlines()} if rc == 0 else False
-
-    if already:
+    if on_roster(classroom, author):
         comment(issue,
                 f"You are already on the roster for this section, @{author}.\n\n"
                 "If you never got the invitation email, check spam. If it expired, "
@@ -110,8 +155,7 @@ def main() -> int:
         gh("issue", "close", issue)
         return 0
 
-    rc, out = gh("teacher", "roster", "add", ORG, classroom, author, "--section",
-                 classroom.rsplit("-", 1)[-1])
+    rc, out = roster_add(classroom, author)
     if rc != 0:
         comment(issue,
                 "Something went wrong adding you, and it is my problem rather than "
