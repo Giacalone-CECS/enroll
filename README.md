@@ -60,16 +60,27 @@ while signed in.
 > **Invitations expire after 7 days.** If yours lapses, just open another issue
 > with the same code and you will get a fresh one.
 
-## 4. That is it
+## 4. One more step, and it is a different one
 
-You are set for the semester. Each lab comes with a one-line command in its own
-Canvas announcement, like:
+You are in the organization for the whole semester, and you will not need to
+come back to this page.
+
+**Joining the organization is not the same as picking up a lab.** Joining you do
+once. Picking up a lab is separate, and you do it once for *every* lab, with the
+one-line command in that lab's Canvas announcement:
 
 ```
 gh student accept Giacalone-CECS cecs-326-fa26-01 lab-01-threads
 ```
 
-You will not need to come back here.
+That command creates your own private repository for that lab. Until you run it,
+you do not have one.
+
+> [!TIP]
+> **If a push ever fails with a 404**, this is almost always why. Run
+> `git remote -v` in your working folder. If the address contains
+> `agiacalone`, you are in my copy of the assignment, which you cannot write
+> to. Your own repository has your GitHub username at the end of its name.
 
 ---
 
