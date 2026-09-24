@@ -169,11 +169,14 @@ def main() -> int:
 It expires in **7 days**. If you do not see it, check spam.
 
 Once you have accepted, you can pick up assignments. The command for each one
-goes out with its Canvas announcement, and looks like:
+goes out with its Canvas announcement. For your section it looks like this:
 
 ```
 gh student accept {ORG} {classroom} <assignment>
 ```
+
+Replace `<assignment>`, including the angle brackets, with the lab name from
+that announcement.
 
 You do not need to come back to this repository.""")
     gh("issue", "close", issue)

@@ -67,11 +67,30 @@ come back to this page.
 
 **Joining the organization is not the same as picking up a lab.** Joining you do
 once. Picking up a lab is separate, and you do it once for *every* lab, with the
-one-line command in that lab's Canvas announcement:
+one-line command in that lab's Canvas announcement. The command has this shape:
 
 ```
-gh student accept Giacalone-CECS cecs-326-fa26-01 lab-01-threads
+gh student accept Giacalone-CECS <your-classroom> <lab-name>
 ```
+
+> [!IMPORTANT]
+> **Do not paste the line above as it is.** Replace both parts in angle brackets.
+> Copy the exact command from your own lab's Canvas announcement, and it will
+> already be right.
+
+- **`<your-classroom>`** depends on your section:
+
+  | Your section | `<your-classroom>` |
+  |---|---|
+  | CECS 326 §01 | `cecs-326-fa26-01` |
+  | CECS 326 §03 | `cecs-326-fa26-03` |
+  | CECS 378 §01 | `cecs-378-fa26-01` |
+
+- **`<lab-name>`** is in the lab's Canvas announcement, for example `lab-01-threads`.
+
+For example, a CECS 326 §01 student picking up Lab 1 runs
+`gh student accept Giacalone-CECS cecs-326-fa26-01 lab-01-threads`. That exact
+line is wrong for CECS 326 §03 and for CECS 378.
 
 That command creates your own private repository for that lab. Until you run it,
 you do not have one.
